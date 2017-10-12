@@ -47,7 +47,7 @@ class MyAgent(spade.Agent.Agent):
 
 
 class MyAgent_send(spade.Agent.Agent):
-    class InformBehav(spade.Behaviour.OneShotBehaviour):
+    class InformBehav(spade.Behaviour.Behaviour):
         def _process(self):
             # First, form the receiver AID
             receiver = spade.AID.aid(name="agent@127.0.0.1",
@@ -56,7 +56,7 @@ class MyAgent_send(spade.Agent.Agent):
             # Second, build the message
             self.msg = spade.ACLMessage.ACLMessage()  # Instantiate the message
             self.msg.setPerformative("inform")  # Set the "inform" FIPA performative
-            self.msg.setOntology("cooking")  # Set the ontology of the message content
+            self.msg.setOntology("test")  # Set the ontology of the message content
             self.msg.setLanguage("OWL-S")  # Set the language of the message content
             self.msg.addReceiver(receiver)  # Add the message receiver
             self.msg.setContent("Hello World")  # Set the message content
