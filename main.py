@@ -7,3 +7,5 @@ class MyAgent(spade.Agent.Agent):
 if __name__ == "__main__":
 	a = MyAgent("agent@127.0.0.1", "secret")
 	a.start()
+
+
