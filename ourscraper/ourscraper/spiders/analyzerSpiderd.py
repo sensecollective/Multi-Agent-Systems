@@ -22,7 +22,6 @@ class AnalyzerspiderSpiderd(scrapy.Spider):
     
     
     def setCity(self,city):
-        print "-----------------------------setcity---------------------"
         self.city=city
         self.url='http://www.touropia.com/tourist-attractions-in-'+city+'/'
         #here should be that URLs found by FinderAgent 
