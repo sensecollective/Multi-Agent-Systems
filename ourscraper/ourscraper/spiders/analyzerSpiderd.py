@@ -2,6 +2,7 @@
 import scrapy
 from scrapy.crawler import CrawlerProcess
 import io
+import re
 
 
 #---------------------------------------------------------------------------AnalyzerSpider------------------------------------------------------------------------
@@ -24,7 +25,8 @@ class AnalyzerspiderSpiderd(scrapy.Spider):
         print "-----------------------------setcity---------------------"
         self.city=city
         self.url='http://www.touropia.com/tourist-attractions-in-'+city+'/'
-        self.allowed_domains.append(self.url)
+        #here should be that URLs found by FinderAgent 
+        self.allowed_domains.append(self.url) 
         self.start_urls.append(self.url)
             
         print "I am a spider with name:  ",self.name,"and I am looking for activities in city=",self.city
@@ -37,9 +39,13 @@ class AnalyzerspiderSpiderd(scrapy.Spider):
         #Give the extracted content row wise
         for item in zip(titles,rankings):
             #create a dictionary to store the scraped info
+            r=item[0]
+            r=re.sub('[.\xc2\xa0]','',r)
+            t=item[1]
+            t = re.sub('[()]', '', t)
             scraped_info = {
-                'title' : item[0],
-                'ranking' : item[1]
+                'title' : r,
+                'ranking' : t
             }
            
            

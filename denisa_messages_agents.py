@@ -7,6 +7,9 @@ import spade
 import csv
 import re
 
+import bs4
+from google import google
+
 
 server_IP="127.0.0.1"
 
@@ -113,9 +116,9 @@ class PbSolAgent(GeneralAgent):
             print "---------------------------------------------------"
             for row in reader:
                 r=row['ranking']
-                r=re.sub('[.\xc2\xa0]','',r)
+                # r=re.sub('[.\xc2\xa0]','',r)
                 t=row['title']
-                t = re.sub('[!@#$(]', '', t)
+                # t = re.sub('[!@#$(]', '', t)
                 
                 print '******' +r +'  ' +t 
             print "---------------------------------------------------"
@@ -124,10 +127,24 @@ class PbSolAgent(GeneralAgent):
         print "MyAgent starting . . ."
         sb = self.SendBehav()
         sb.defineMessage(self.problem)
-        sb.defineReceiver("anlizeagent")
-        rb = self.ReceiveBehav()
+        sb.defineReceiver("fagent")
         self.setDefaultBehaviour(sb)
-
+        
+        rb = self.ReceiveBehav()
+        cooking_template = spade.Behaviour.ACLTemplate()
+        cooking_template.setOntology("cooking")
+        mt = spade.Behaviour.MessageTemplate(cooking_template)
+        self.addBehaviour(rb, mt)
+        
+        
+        
+        sb = self.SendBehav()
+        sb.defineMessage(self.problem)
+        sb.defineReceiver("anlizeagent")
+        self.setDefaultBehaviour(sb)
+        
+        
+        rb = self.ReceiveBehav()
         cooking_template = spade.Behaviour.ACLTemplate()
         cooking_template.setOntology("cooking")
         mt = spade.Behaviour.MessageTemplate(cooking_template)
@@ -149,24 +166,52 @@ class FindSourcesAgent(GeneralAgent):
         self.problem=problem
         
         print "I am ",self.identificator,"and i have id=",self.name,"and pass= ",self.password,"and pb=",self.problem
+    
+     #---------------------------------------------------ReceiveBehaviour--------------------------------------
+    class ReceiveBehavAnalyser(spade.Behaviour.Behaviour):
+        
+        city=""
+        
+        def __init__ (self):
+            spade.Behaviour.Behaviour.__init__(self)
+                
+        def _process(self):
+            self.msg = None
             
+            # Blocking receive for 10 seconds
+            self.msg = self._receive(True, 10)
+
+            # Check wether the message arrived
+            if self.msg:
+                print "Finder agent: I got a message !I received the city and now I will search for URLs..."
+                #search on google using the city receives through the message received from the PobSolAgent
+                self.city=self.msg.content
+            else:
+                print "Finder agent: I waited but got no message"   
 
     def _setup(self):
         print "MyAgent starting . . ."
-        sb = self.SendBehav()
-        sb.defineMessage("MEsaj de la Analyser")
-        sb.defineReceiver("fagent")
+        
         rb = self.ReceiveBehav()
-        self.setDefaultBehaviour(sb)
-
         cooking_template = spade.Behaviour.ACLTemplate()
         cooking_template.setOntology("cooking")
         mt = spade.Behaviour.MessageTemplate(cooking_template)
-
         self.addBehaviour(rb, mt)
         
+        url_list=[]
+
+        file = open('URLs.txt','w') 
+        response = GoogleSearch().search("atractii turistice"+city)
+        for result in response.results:
+            url_list.append(result.url)
+            file.write("\n"+result.url) 
+        file.close() 
         
-    
+        
+        sb = self.SendBehav()
+        sb.defineMessage("Message from Finder"+url_list)
+        sb.defineReceiver("agent")
+        self.setDefaultBehaviour(sb)
     
     
 
