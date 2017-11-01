@@ -29,6 +29,14 @@ class AnalyzerspiderSpiderd(scrapy.Spider):
         self.start_urls.append(self.url)
             
         print "I am a spider with name:  ",self.name,"and I am looking for activities in city=",self.city
+        
+    def setURL(self,url):
+        self.url=url
+        #here should be that URLs found by FinderAgent 
+        self.allowed_domains.append(self.url) 
+        self.start_urls.append(self.url)
+            
+        print "I am a spider with name:  ",self.name,"and I am looking for activities in url=",self.url
       
    
     def parse(self, response):

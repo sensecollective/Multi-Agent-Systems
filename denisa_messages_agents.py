@@ -104,11 +104,13 @@ class GeneralAgent(spade.Agent.Agent):
 class PbSolAgent(GeneralAgent):
     
     problem=""
+    url=""
     
     def __init__ (self,identificator,parola,problem):
             
         GeneralAgent.__init__(self,identificator,parola)
         self.problem=problem
+        self.url='http://www.touropia.com/tourist-attractions-in-'+problem+'/'
         
         print "I am ",self.identificator,"and i have id=",self.name,"and pass= ",self.password,"and pb=",self.problem
             
@@ -148,7 +150,7 @@ class PbSolAgent(GeneralAgent):
         
         
         sb2 = self.SendBehav()
-        sb2.defineMessage(self.problem)
+        sb2.defineMessage(self.url)
         sb2.defineReceiver("anlizeagent")
         self.addBehaviour(sb2)
         
@@ -282,7 +284,7 @@ class AnalyseSourcesAgent(GeneralAgent):
             if self.msg:
                 print "Analyse agent: I got a message !I received the city and now I will search for activities..."
                 #set the city for the spider with the message received from the PobSolAgent
-                spiderAnalyser.setCity(self.msg.content) 
+                spiderAnalyser.setURL(self.msg.content) 
                 
                 
                 self.process.crawl(spiderAnalyser)
