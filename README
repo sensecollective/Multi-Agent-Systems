@@ -1,11 +1,13 @@
-<h1>Multi-Agent Information Retrieval for Touristic Recommendations</h1>
+#Multi-Agent Information Retrieval for Touristic Recommendations#
+
+To the best of our knowledge, all necessary library are included. 
 
 For running the programe followe the next steps:
+0. Open the terminal in the main folder. The commands assume that you are running Ubunutu. 
 1. run command "sudo python configure.py localhost"
 2. run command "sudo python runspade.py"
 3. run denisa_main.py
 You will obtain 2 files:
 a) URLs.txt file where there are written URLs found by the FinderAgent
 b) analyzerResults.csv where you can find the list of touristic activities/places suitable for the user
-
 Also, the programe have multiple outputs in console, including the list of the activities that the ProblemSolverAgent gives to the user.
